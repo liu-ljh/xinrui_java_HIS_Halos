@@ -1,0 +1,249 @@
+package org.xinrui.wuchuang.util.testResult;
+
+
+import lombok.extern.slf4j.Slf4j;
+import org.xinrui.common.entity.*;
+import org.xinrui.wuchuang.dto.testResult.TestResultDto;
+import org.xinrui.wuchuang.dto.testResult.nested.LaneQcDto;
+import org.xinrui.wuchuang.dto.testResult.nested.SampleQcDto;
+import org.xinrui.wuchuang.dto.testResult.nested.TestCnvDto;
+import org.xinrui.common.util.ConvertUtil;
+
+import java.time.LocalDateTime;
+
+@Slf4j
+public class BuildUtil {
+
+    private static final Long UPDATED_BY = 1L; // 固定更新人ID
+    private static final int INVERT = 1; //固定更新版本值为1
+
+    public static SampleInfo buildSampleInfo(TestResultDto dto) {
+        SampleInfo info = new SampleInfo();
+        info.setSampleId(dto.getSampleId());
+        info.setPoolingSubId(dto.getPoolingSubId());
+        info.setSlideId(dto.getSlideId());
+        info.setLaneId(dto.getLaneId());
+        info.setDnbId(dto.getDnbId());
+        info.setSampleType(ConvertUtil.convertSampleType(dto.getSampleType()));
+        info.setShipmentCondition(ConvertUtil.convertShipmentCondition(dto.getShipmentCondition()));
+        info.setTubeType(ConvertUtil.convertTubeType(dto.getTubeType()));
+        info.setCollectDate(ConvertUtil.convertDateTime(dto.getCollectDate()));
+        info.setReceivedDate(ConvertUtil.convertDateTime(dto.getReceivedDate()));
+        info.setAdditionalReportFlag(ConvertUtil.convertAdditionalReportFlag(dto.getAdditionalReportFlag()));
+        info.setOldSampleNum(dto.getOldSampleNum());
+        info.setRepeatCount(dto.getRepeatCount());
+        // 设置缺失字段 - 从diseaseList获取产品信息
+        if (dto.getDiseaseList() != null && !dto.getDiseaseList().isEmpty()) {
+            TestCnvDto firstTestCnv = dto.getDiseaseList().get(0);
+            if(firstTestCnv.getProductNo()!=null) info.setProductNo(firstTestCnv.getProductNo());
+            else info.setProductNo("未提供产品套餐编号");
+            if(firstTestCnv.getProductName()!=null) info.setProductName(firstTestCnv.getProductName());
+            else info.setProductName("未提供产品套餐名称");
+            //因为ProductNo和ProductName是必填项，所以如果diseaseList为空，则设置为默认值
+        } else {
+            // 如果diseaseList为空，可以设置为默认值
+            info.setProductNo("未知");
+            info.setProductName("未知");
+        }
+        info.setClinicNum(dto.getClinicNum());
+        info.setHospitalName(dto.getHospitalName());
+        info.setDepartmentName(null);
+        info.setDoctorName(dto.getDoctorName());
+        info.setIntver(INVERT);
+        info.setUpdatedBy(UPDATED_BY);
+        info.setUpdatedOn(LocalDateTime.now());
+        return info;
+    }
+
+    public static PatientInfo buildPatientInfo(TestResultDto dto) {
+        PatientInfo info = new PatientInfo();
+        if(dto.getPatientName() != null) info.setName(dto.getPatientName());
+        else info.setName("未提供患者姓名");
+        info.setPhone(dto.getPatientMobile());
+        info.setPatientTel(null);
+        info.setSex("女");  //因为是孕检相关所以统一设置为女
+        info.setBirthday(null);
+        info.setIdentity(dto.getPatientIdCard());
+        info.setIncome(null);
+        info.setPermanentAddress(null);
+        info.setPermanentAddressDetail(null);
+        info.setCurrentAddress(null);
+        info.setCurrentAddressDetail(dto.getPatientAddress());
+        info.setEmergencyContact(null); // 紧急联系人
+        info.setEmergentRelation(null); // 与紧急联系人关系
+        info.setEmergencyContactPhone(null); // 紧急联系人电话
+        info.setEnable(1); // 默认有效
+        info.setIntver(INVERT); // 版本号初始为0
+        info.setCreatedBy(UPDATED_BY); // 创建人
+        info.setCreatedOn(LocalDateTime.now()); // 创建时间
+        info.setUpdatedBy(UPDATED_BY); // 更新人
+        info.setUpdatedOn(LocalDateTime.now()); // 更新时间
+        return info;   //待完善
+    }
+
+    public static ExaminationInfo buildExaminationInfo(TestResultDto dto, SampleInfo sampleInfo) {
+        ExaminationInfo exam = new ExaminationInfo();
+        exam.setSampleOid(sampleInfo.getOid());
+
+        // 设置患者年龄
+        exam.setPatientAge(dto.getPatientAge());
+        exam.setPatientHeight(null);
+        exam.setPatientWeight(null);
+        exam.setPatientEdd(null);
+
+        // 处理孕周（TestResultDto中的gestationalWeeks是"周,天"格式的字符串）
+        if (dto.getGestationalWeeks() != null && dto.getGestationalWeeks().contains(",")) {
+            String[] weeksAndDays = dto.getGestationalWeeks().split(",");
+            if (weeksAndDays.length >= 1) {
+                exam.setGestationalWeeks(Integer.parseInt(weeksAndDays[0].trim()));
+            }
+            if (weeksAndDays.length >= 2) {
+                exam.setGestationalDays(Integer.parseInt(weeksAndDays[1].trim()));
+            }
+        }
+
+        // 转换其他字段
+        exam.setFetusType(ConvertUtil.convertFetusType(dto.getFetusType()));
+        exam.setLastMenstrualPeriod(ConvertUtil.convertDate(dto.getLastMenstrualPeriod()));
+        exam.setChorionType(ConvertUtil.convertChorion(dto.getChorion()));
+        exam.setBUltrasonography(ConvertUtil.convertBUltrasonography(dto.getBUltrasonography()));
+        exam.setIvfFlag(ConvertUtil.convertIvfFlag(dto.getIvfFlag()));
+        exam.setConceptionMethod(ConvertUtil.convertConceptionMethod(dto.getConceptionMethod()));
+        exam.setBhGravidity(dto.getBhGravidity());
+        exam.setBhParity(dto.getBhParity());
+        exam.setBhOther(dto.getBhOther());
+        exam.setAmniocentesisResult(dto.getAmniocentesis());
+        exam.setIllnessHistoryPast(dto.getIllnessHistoryPast());
+        exam.setIllnessHistoryPresent(dto.getIllnessHistoryPresent());
+        exam.setIllnessHistoryAllergy(dto.getIllnessHistoryAllergy());
+        exam.setIllnessHistoryGenetic(dto.getIllnessHistoryGenetic());
+        exam.setPatientRemark(dto.getPatientRemark());
+        exam.setTubebabyType(null); // DTO 中无自体/异体供卵字段
+        exam.setUsCheck(null);// DTO 中无超声检查字段
+        exam.setUsResult(null); // DTO 中无超声异常信息字段
+        exam.setReduceDate(null); // DTO 中无减胎日期字段
+        exam.setDownSymdromeFlag(null);// DTO 中无唐筛结果字段
+        exam.setDownSymdromeResult1(null); // 使用唐筛结果
+        exam.setDownSymdromeResult2(null); // DTO 中无 18-三体风险值字段
+        exam.setDownSymdromeResultOth(null); // DTO 中无其他风险值字段
+        exam.setPunctureAppointment(null); // DTO 中无预约穿刺诊断情况字段
+        exam.setPunctureAppointmentDate(null); // DTO 中无穿刺诊断预约日期字段
+        exam.setTransplantation(null); // DTO 中无移植手术字段
+        exam.setTransplantationDate(null); // DTO 中无移植手术日期字段
+        exam.setAllogeneicTransfusion(null); // DTO 中无异体输血字段
+        exam.setAllogeneicTransfusionDate(null); // DTO 中无异体输血日期字段
+        exam.setImmunotherapy(null); // DTO 中无免疫治疗字段
+        exam.setImmunotherapyDate(null); // DTO 中无免疫治疗日期字段
+        exam.setImmunotherapyType(null); // DTO 中无免疫治疗类型字段
+        exam.setSpecialCase(null); // DTO 中无特殊情况字段
+
+        // 设置审计字段
+        exam.setIntver(INVERT);
+        exam.setUpdatedBy(UPDATED_BY);
+        exam.setUpdatedOn(LocalDateTime.now());
+
+
+        return exam;
+    }
+
+    public static SampleQcInfo buildSampleQcInfo(TestResultDto dto, SampleInfo sampleInfo) {
+        SampleQcInfo qc = new SampleQcInfo();
+        qc.setSampleOid(sampleInfo.getOid());
+
+        // 设置样本质控结果
+        qc.setSampleQcResult(dto.getSampleQcResult());
+
+        // 设置样本质控详细指标
+        if (dto.getSampleQc() != null) {
+            SampleQcDto sampleQcDto = dto.getSampleQc();
+            qc.setSampleGc(ConvertUtil.convertBigDecimal(sampleQcDto.getSampleGc()));
+            qc.setUniqueReads(ConvertUtil.convertBigDecimal(sampleQcDto.getUniqueReads()));
+            qc.setReadsNum(ConvertUtil.convertBigDecimal(sampleQcDto.getReadsNum()));
+            qc.setDuplicationRate(ConvertUtil.convertBigDecimal(sampleQcDto.getDuplicationRate()));
+            qc.setMapRate(ConvertUtil.convertBigDecimal(sampleQcDto.getMapRate()));
+        }
+
+        // 设置审计字段
+        qc.setIntver(INVERT);
+        qc.setUpdatedBy(UPDATED_BY);
+        qc.setUpdatedOn(LocalDateTime.now());
+
+        return qc;
+    }
+
+    public static LaneQcInfo buildLaneQcInfo(TestResultDto dto, SampleInfo sampleInfo) {
+        LaneQcInfo qc = new LaneQcInfo();
+        qc.setSampleOid(sampleInfo.getOid());
+
+
+
+        // 设置lane质控详细指标
+        if (dto.getLaneQc() != null) {
+            LaneQcDto laneQcDto = dto.getLaneQc();
+            qc.setLaneQcResult(laneQcDto.getLaneQcResult());
+            qc.setLaneQcReason(laneQcDto.getLaneQcReason());
+            qc.setLaneReadsMean(ConvertUtil.convertBigDecimal(laneQcDto.getReadsNum()));
+            qc.setLaneMapRate(ConvertUtil.convertBigDecimal(laneQcDto.getMapRate()));
+            qc.setTotalDecodeRate(ConvertUtil.convertBigDecimal(laneQcDto.getTotalDecodeRate()));
+            qc.setLaneDuplicateRate(ConvertUtil.convertBigDecimal(laneQcDto.getDuplicateRate()));
+            qc.setFailSampleRate(ConvertUtil.convertBigDecimal(laneQcDto.getFailSampleRate()));
+            qc.setLaneGcMean(ConvertUtil.convertBigDecimal(laneQcDto.getLaneGc()));
+            qc.setTotalReads(ConvertUtil.convertBigDecimal(laneQcDto.getTotalReads()));
+            qc.setQ20(ConvertUtil.convertBigDecimal(laneQcDto.getQ20()));
+            qc.setDimRate(ConvertUtil.convertBigDecimal(laneQcDto.getDimRate()));
+        }
+
+        // 设置审计字段
+        qc.setIntver(INVERT);
+        qc.setUpdatedBy(UPDATED_BY);
+        qc.setUpdatedOn(LocalDateTime.now());
+
+        return qc;
+
+    }
+
+    public static TestResultInfo buildTestResultInfo(TestResultDto dto, SampleInfo sampleInfo) {
+            TestResultInfo result = new TestResultInfo();
+            result.setSampleOid(sampleInfo.getOid());
+
+            // 设置检测基本信息
+            result.setTestTime(ConvertUtil.convertDateTime(dto.getTestTime()));
+            result.setTestResult(dto.getDetectionResult());
+            result.setReportType(dto.getReportType());
+            result.setReportCreateTime(ConvertUtil.convertDateTime(dto.getReportCreateTime()));
+            result.setDownScreeningResult(ConvertUtil.convertDownScreening(dto.getDownScreening()));
+
+            // 设置染色体相关数据
+            result.setZChr13(ConvertUtil.convertBigDecimal(dto.getZChr13()));
+            result.setZChr18(ConvertUtil.convertBigDecimal(dto.getZChr18()));
+            result.setZChr21(ConvertUtil.convertBigDecimal(dto.getZChr21()));
+            result.setTestChr13(dto.getTestChr13());
+            result.setTestChr18(dto.getTestChr18());
+            result.setTestChr21(dto.getTestChr21());
+            result.setTestChrSex(dto.getTestChrSex());
+            result.setAbnormalChrX(dto.getAbnormalChrX());
+            result.setFracAbs(ConvertUtil.convertBigDecimal(dto.getFracAbs()));
+            result.setFetalFaction(ConvertUtil.convertBigDecimal(dto.getFetalFraction()));
+            result.setChildLvChr13(ConvertUtil.convertBigDecimal(dto.getChildLvChr13()));
+            result.setChildLvChr18(ConvertUtil.convertBigDecimal(dto.getChildLvChr18()));
+            result.setChildLvChr21(ConvertUtil.convertBigDecimal(dto.getChildLvChr21()));
+            result.setRiskIndex13(dto.getRiskIndex13());
+            result.setRiskIndex18(dto.getRiskIndex18());
+            result.setRiskIndex21(dto.getRiskIndex21());
+            result.setTestDeletionDuplication(dto.getTestDeletionDuplication());
+            result.setTestChrOther(dto.getTestChrOther());
+            result.setAbnormalChrNum(dto.getAbnormalChrNum());
+            result.setExtraInformation(dto.getChrN());
+            result.setRecommendedOperation(dto.getRecommendedOperation());
+            result.setDoctorOpinion(dto.getDoctorOpinion());
+
+            // 设置审计字段
+            result.setIntver(INVERT);
+            result.setUpdatedBy(UPDATED_BY);
+            result.setUpdatedOn(LocalDateTime.now());
+
+            return result;
+    }
+
+
+}
