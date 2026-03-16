@@ -33,5 +33,5 @@ public class TestResultDto {
     private InterpretationInfoDto interpretationInfo;
 
     @ApiModelProperty("报告信息（动态键值对）")
-    private ReportInfoDto reportInfo;
+    private Map<String, Object> reportInfo;
 }
