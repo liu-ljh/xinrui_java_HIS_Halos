@@ -6,7 +6,7 @@ import org.xinrui.common.entity.SampleInfo;
 import org.xinrui.kangyun.dto.testResult.TestResultDto;
 import org.xinrui.kangyun.service.TestResultService;
 
-@Service
+@Service("KangyunTestResultService")
 public class TestResultServiceImpl implements TestResultService {
 
     @Override

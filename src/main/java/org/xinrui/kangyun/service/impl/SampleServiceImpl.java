@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.xinrui.kangyun.dto.SampleDto;
 import org.xinrui.kangyun.service.SampleService;
 
-@Service
+@Service("KangyunSampleService")
 public class SampleServiceImpl implements SampleService {
 
     @Override

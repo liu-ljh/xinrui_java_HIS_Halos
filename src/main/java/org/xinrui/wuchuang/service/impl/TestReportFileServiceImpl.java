@@ -21,7 +21,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 @Slf4j
-@Service
+@Service("WuchuangTestReportFileService")
 public class TestReportFileServiceImpl implements TestReportFileService {
 
     private static final Long UPDATED_BY = 1L; // 固定更新人ID

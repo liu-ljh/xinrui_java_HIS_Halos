@@ -1,6 +1,7 @@
 package org.xinrui.wuchuang.mapper;
 
 
+import org.springframework.stereotype.Repository;
 import org.xinrui.wuchuang.dto.SampleDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
  * 该类包含与请求样本信息相关的数据访问方法
  */
 @Mapper
+@Repository("WuchuangSampleMapper")
 public interface SampleMapper {
 
     /**

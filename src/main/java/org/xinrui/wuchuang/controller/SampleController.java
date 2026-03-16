@@ -2,6 +2,7 @@ package org.xinrui.wuchuang.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xinrui.common.dto.ApiResponse;
@@ -18,11 +19,12 @@ import javax.validation.constraints.NotBlank;
  */
 @Slf4j
 @Validated
-@RestController
-@RequestMapping("/his/V3/sample")
+@RestController("WuchuangSampleController")
+@RequestMapping("/his/V3/wuchuang/sample")
 public class SampleController {
 
     @Autowired
+    @Qualifier("WuchuangSampleService")
     private SampleService sampleService;
 
     /**

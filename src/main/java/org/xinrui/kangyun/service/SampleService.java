@@ -1,6 +1,8 @@
 package org.xinrui.kangyun.service;
 
+import org.springframework.stereotype.Service;
 import org.xinrui.kangyun.dto.SampleDto;
+
 
 public interface SampleService {
 

@@ -3,6 +3,7 @@ package org.xinrui.wuchuang.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xinrui.common.mapper.BloodFilmManagementMapper;
@@ -24,10 +25,11 @@ import org.xinrui.wuchuang.util.sample.*;
 import java.time.LocalDate;
 
 @Slf4j
-@Service
+@Service("WuchuangSampleService")
 public class SampleServiceImpl implements SampleService {
 
     @Autowired
+    @Qualifier("WuchuangSampleMapper")
     private SampleMapper sampleMapper;
 
     @Autowired

@@ -2,6 +2,7 @@ package org.xinrui.wuchuang.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,14 +20,16 @@ import javax.validation.Valid;
  */
 @Slf4j
 @Validated
-@RestController
-@RequestMapping("/his/V3/result")
+@RestController("WuchuangTestResultController")
+@RequestMapping("/his/V3/wuchuang/result")
 public class TestResultController {
 
     @Autowired
+    @Qualifier("WuchuangTestResultService")
     private TestResultService testResultService;
 
     @Autowired
+    @Qualifier("WuchuangTestReportFileService")
     private TestReportFileService testReportFileService;
 
     /**

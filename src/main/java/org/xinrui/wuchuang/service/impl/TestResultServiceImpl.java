@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
-@Service
+@Service("WuchuangTestResultService")
 public class TestResultServiceImpl implements TestResultService {
 
     private static final Long UPDATED_BY = 1L; // 固定更新人ID
