@@ -3,5 +3,7 @@ server:
 
 #数据源配置
 spring:
+  application:
+    name: xinrui-BGI
   profiles:
     active: dev
