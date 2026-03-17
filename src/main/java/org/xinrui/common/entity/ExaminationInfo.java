@@ -199,4 +199,53 @@ public class ExaminationInfo implements Serializable {
     @ApiModelProperty(value = "特殊情况", example = "example_value")
     @TableField("special_case")
     private String specialCase;
+
+    @ApiModelProperty(value = "男方染色体检测：1-已做 2-未做", example = "1")
+    @TableField("male_detect_flag")
+    private Integer maleDetectFlag;
+
+    @ApiModelProperty(value = "男方检测方法:如果已做，则该字段必填", example = "example_value")
+    @TableField("detect_method_male")
+    private String detectMethodMale;
+
+    @ApiModelProperty(value = "男方结果:如果已做，则该字段必填", example = "example_value")
+    @TableField("detect_result_male")
+    private String detectResultMale;
+
+    @ApiModelProperty(value = "女方染色体检测：1-已做 2-未做", example = "1")
+    @TableField("female_detect_flag")
+    private Integer femaleDetectFlag;
+
+    @ApiModelProperty(value = "女方检测方法:如果已做，则该字段必填", example = "example_value")
+    @TableField("detect_method_female")
+    private String detectMethodFemale;
+
+    @ApiModelProperty(value = "女方结果:如果已做，则该字段必填", example = "example_value")
+    @TableField("detect_result_female")
+    private String detectResultFemale;
+
+    @ApiModelProperty(value = "子女染色体检测：1-已做 2-未做", example = "1")
+    @TableField("child_detect_flag")
+    private Integer childDetectFlag;
+
+    @ApiModelProperty(value = "子女检测方法:如果已做，则该字段必填", example = "example_value")
+    @TableField("detect_method_child")
+    private String detectMethodChild;
+
+    @ApiModelProperty(value = "子女结果:如果已做，则该字段必填", example = "example_value")
+    @TableField("detect_result_child")
+    private String detectResultChild;
+
+    @ApiModelProperty(value = "家族史", example = "example_value")
+    @TableField("illness_history_genetic_flag")
+    private Integer illnessHistoryGeneticFlag;
+
+    @ApiModelProperty(value = "男方疾病既往史", example = "example_value")
+    @TableField("illness_history_past_male")
+    private String illnessHistoryPastMale;
+
+    @ApiModelProperty(value = "女方疾病既往史", example = "example_value")
+    @TableField("illness_history_past_female")
+    private String illnessHistoryPastFemale;
+
 }

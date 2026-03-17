@@ -123,4 +123,41 @@ public class SampleInfo implements Serializable {
     @ApiModelProperty(value = "更新时间(审计字段)", example = "2023-08-15 16:00:00")
     @TableField("updated_on")
     private LocalDateTime updatedOn;
+
+    @ApiModelProperty(value = "送检对象类型:1-胚胎胎儿 2-疑似患者", example = "1")
+    @TableField("detect_obj")
+    private Integer detectObj;
+
+    @ApiModelProperty(value = "是否录入家系:1-是 0-否", example = "1")
+    @TableField("is_save_pedigree")
+    private Integer isSavePedigree;
+
+    @ApiModelProperty(value = "先证者样本编号如果是否录入家系选择1；是，则需填写先证者样本编号", example = "SMP2023001")
+    @TableField("proband_sample")
+    private String probandSample;
+
+    @ApiModelProperty(value = "已知家系关系：1-父亲 2-母亲 4-本人 8-其他", example = "1")
+    @TableField("client_relation")
+    private Integer clientRelation;
+
+    @ApiModelProperty(value = "受检者类型:1-确诊患者；2-疑似患者；4-表型正常人群；8-其他", example = "1")
+    @TableField("client_type")
+    private Integer clientType;
+
+    @ApiModelProperty(value = "送检原因：1-无创提示高风险；2-≥35岁孕妇；3-自然流产；4-稽留流", example = "1")
+    @TableField("detect_reason")
+    private String detectReason;
+
+    @ApiModelProperty(value = "临床诊断;送检单类型为胚胎胎儿则该字段必填", example = "诊断A")
+    @TableField("clinical_diagnosis")
+    private String clinicalDiagnosis;
+
+    @ApiModelProperty(value = "临床诊断;送检单类型为疑似患者则该字段必填", example = "诊断B")
+    @TableField("detect_clinical_diagnosis")
+    private String detectClinicalDiagnosis;
+
+    @ApiModelProperty(value = "取样孕周;送检单类型为胚胎胎儿则该字段必填,周数限制050，天数限制06", example = "12")
+    @TableField("gestational_weeks")
+    private String gestationalWeeks;
+
 }
