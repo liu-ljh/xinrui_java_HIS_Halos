@@ -23,6 +23,7 @@ public class SampleDto {
     @NotBlank(message = "产品套餐编号不能为空")
     private String productNo;
 
+
     @ApiModelProperty(value = "样本类型（1：产前绒毛；2：流产物绒毛；4：胎儿组织；8：羊水；16：脐带血；32：产前样本DNA；128：产后样本DNA；64：外周血；256：羊水培养细胞）", required = true)
     @NotNull(message = "样本类型不能为空")
     private Integer sampleType;
