@@ -296,6 +296,7 @@ public class TestReportFileServiceImpl implements TestReportFileService {
         reportFile.setSampleOid(sampleOid);
         reportFile.setFilePath(relativePath);
         reportFile.setFileType(fileType); // 1表示PDF,0为word
+        reportFile.setReportType(0);
         reportFile.setIntver(0);
         reportFile.setUpdatedBy(UPDATED_BY);
         reportFile.setUpdatedOn(LocalDateTime.now());

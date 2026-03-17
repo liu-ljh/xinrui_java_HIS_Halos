@@ -36,6 +36,10 @@ public class TestReportFileInfo implements Serializable {
     @TableField("file_type")
     private Integer fileType;
 
+    @ApiModelProperty(value = "报告类型（0为无创报告，1为康孕报告", example = "1")
+    @TableField("report_type")
+    private Integer reportType;
+
     @ApiModelProperty(value = "数据版本", example = "0")
     @TableField("intver")
     private Integer intver;
