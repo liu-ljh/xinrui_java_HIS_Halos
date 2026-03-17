@@ -155,9 +155,6 @@ public class SampleInfo implements Serializable {
     @ApiModelProperty(value = "临床诊断;送检单类型为疑似患者则该字段必填", example = "诊断B")
     @TableField("detect_clinical_diagnosis")
     private String detectClinicalDiagnosis;
-
-    @ApiModelProperty(value = "取样孕周;送检单类型为胚胎胎儿则该字段必填,周数限制050，天数限制06", example = "12")
-    @TableField("gestational_weeks")
-    private String gestationalWeeks;
+    
 
 }
