@@ -50,5 +50,6 @@ rest:
 # 报告文件存储配置
 file:
   storage:
-    root: D:/service/BGI/HalosReportFile
+    wuChuangRoot: D:/service/BGI/ReportFile/WuChuangReport/
+    kangYunRoot: D:/service/BGI/ReportFile/KangYunReport/
 

@@ -39,12 +39,19 @@ public class TestResultController {
     }
 
 
-
+    /**
+     * 接收康孕推送的报告文件（multipart/form-data）
+     *
+     * 约定：
+     * 1. Content-Type: multipart/form-data
+     * 2. 文件字段名：file
+     * 3. 文件名由 Halos 系统通过"报告命名"功能生成，HIS 通过文件名匹配样本
+     * 4. 支持 PDF 和 WORD 格式，自动根据文件扩展名识别
+     */
     @PostMapping(path = "/pushReport")
     public ApiResponse receiveReport(@RequestParam("file") MultipartFile file) {
         log.info("接收报告文件");
-//        boolean success = testReportFileService.receiveReport(file);
-//        return success ? ApiResponse.success() : ApiResponse.fail("上传失败");
-        return ApiResponse.success();
+        boolean success = testReportFileService.receiveReport(file);
+        return success ? ApiResponse.success() : ApiResponse.fail("上传失败");
     }
 }

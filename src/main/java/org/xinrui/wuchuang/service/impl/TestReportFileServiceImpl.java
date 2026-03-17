@@ -27,7 +27,7 @@ public class TestReportFileServiceImpl implements TestReportFileService {
     private static final Long UPDATED_BY = 1L; // 固定更新人ID
 
     //todo 待配置
-    @Value("${file.storage.root:D:/service/BGI/HalosReportFile}")
+    @Value("${file.storage.wuChuangRoot}")
     private String fileStorageRoot;
 
     @Autowired
@@ -135,125 +135,6 @@ public class TestReportFileServiceImpl implements TestReportFileService {
 
 
 
-//    @Transactional
-//    @Override
-//    public boolean receivePdfReport(MultipartFile file) {
-//        // 1. 验证文件
-//        if (file.isEmpty() || file.getOriginalFilename() == null) {
-//            log.warn("文件为空/文件名为空");
-//            throw new BusinessException("文件为空/文件名为空");
-//        }
-//        if (!file.getOriginalFilename().toLowerCase().endsWith(".pdf")) {
-//            log.info(file.getOriginalFilename());
-//            log.warn("文件格式错误，须为PDF");
-//            throw new BusinessException("文件格式错误，须为PDF");
-//        }
-//
-//        // 2. 解析文件名 - 提取sampleId
-//        String fileName = file.getOriginalFilename();
-//        String sampleId = extractSampleIdFromFileName(fileName,4);
-//
-//        // 3. 根据sampleId查询数据库
-//        SampleInfo sampleInfo = findSampleInfoBySampleId(sampleId);
-//        long sampleOid = sampleInfo.getOid();
-//
-//        // 4. 创建日期目录
-//        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))+"/pdf";
-//        String dirPath = Paths.get(fileStorageRoot, currentDate).toString();
-//        File dir = new File(dirPath);
-//        if (!dir.exists()) {
-//            dir.mkdirs();
-//        }
-//
-//        // 5. 使用原始文件名保存
-//        String filePath = Paths.get(dirPath, fileName).toString();
-//
-//        // 6. 保存文件
-//        try {
-//            file.transferTo(new File(filePath));
-//        } catch (IOException e) {
-//            log.error("文件保存失败", e.getMessage());
-//            throw new BusinessException("文件保存失败");
-//        }
-//
-//        // 7. 更新报告文件表
-//        int fileType = 1;
-//        updateReportFileRecord(sampleOid, currentDate, fileName, fileType);
-//        return true;
-//    }
-//
-//
-//
-//
-//    @Transactional
-//    @Override
-//    public boolean receiveWordReport(MultipartFile file) {
-//        // 1. 验证文件
-//        String fileName = file.getOriginalFilename();
-//        if (file.isEmpty() || fileName == null) {
-//            log.warn("文件为空/文件名为空");
-//            throw new BusinessException("文件为空/文件名为空");
-//        }
-//        String extension = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-//        if (!"docx".equals(extension) && !"doc".equals(extension)) {
-//            log.warn("文件格式错误，须为WORD");
-//            throw new BusinessException("文件格式错误，须为WORD");
-//        }
-//
-//        // 2. 解析文件名 - 提取sampleId
-//        int len = extension.length()+1;
-//        String sampleId = extractSampleIdFromFileName(fileName,len);
-//
-//        // 3. 根据sampleId查询数据库
-//        SampleInfo sampleInfo = findSampleInfoBySampleId(sampleId);
-//        long sampleOid = sampleInfo.getOid();
-//
-//        // 4. 创建日期目录
-//        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))+"/word";
-//        String dirPath = Paths.get(fileStorageRoot, currentDate).toString();
-//        File dir = new File(dirPath);
-//        if (!dir.exists()) {
-//            dir.mkdirs();
-//        }
-//
-//        // 5. 使用原始文件名保存（修改这里）
-//        String filePath = Paths.get(dirPath, fileName).toString();
-//
-//        // 6. 保存文件
-//        try {
-//            file.transferTo(new File(filePath));
-//        } catch (IOException e) {
-//            log.error("文件保存失败", e.getMessage());
-//            throw new BusinessException("文件保存失败");
-//        }
-//
-//        // 7. 更新报告文件表
-//        int fileType = 0;
-//        updateReportFileRecord(sampleOid, currentDate, fileName, fileType);
-//        return true;
-//    }
-
-
-//    /**
-//     * 从文件名中提取sampleId
-//     * 支持格式: sampleId.pdf
-//     *
-//     * @param fileName 文件名
-//     * @return sampleId
-//     * @throws BusinessException 如果文件名格式不正确
-//     */
-//    private String extractSampleIdFromFileName(String fileName, int extensionLen) {
-//
-//        // 移除后缀
-//        String sampleId = fileName.substring(0, fileName.length() - extensionLen);
-//
-//        if (sampleId.isEmpty()) {
-//            throw new BusinessException("sampleId不能为空");
-//        }
-//
-//        log.info("从文件名 {} 中提取到sampleId: {}", fileName, sampleId);
-//        return sampleId;
-//    }
 
     /**
      * 根据sampleId查询SampleInfo
@@ -290,13 +171,14 @@ public class TestReportFileServiceImpl implements TestReportFileService {
                 new QueryWrapper<TestReportFileInfo>()
                         .eq("sample_oid", sampleOid)
                         .eq("file_type", fileType)
+                        .eq("report_type", "2")
         );
 
         TestReportFileInfo reportFile = new TestReportFileInfo();
         reportFile.setSampleOid(sampleOid);
         reportFile.setFilePath(relativePath);
         reportFile.setFileType(fileType); // 1表示PDF,0为word
-        reportFile.setReportType(0);
+        reportFile.setReportType("2");
         reportFile.setIntver(0);
         reportFile.setUpdatedBy(UPDATED_BY);
         reportFile.setUpdatedOn(LocalDateTime.now());
