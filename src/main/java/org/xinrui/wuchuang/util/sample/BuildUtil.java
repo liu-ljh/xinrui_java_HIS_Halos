@@ -129,6 +129,8 @@ public class BuildUtil {
         exam.setIllnessHistoryGeneticFlag(0);
         exam.setIllnessHistoryPastMale(null);
         exam.setIllnessHistoryPastFemale(null);
+        exam.setUltrasoundTestDate( null);
+        exam.setFetusTestFlag(0);
         //结束
 
         exam.setIntver(INVERT);
