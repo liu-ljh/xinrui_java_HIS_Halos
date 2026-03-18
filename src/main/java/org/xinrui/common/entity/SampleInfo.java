@@ -56,7 +56,8 @@ public class SampleInfo implements Serializable {
     @TableField("dnb_id")
     private String dnbId;
 
-    @ApiModelProperty(value = "样本类型代码：1. 全血、2. 血浆、4. DNA", example = "1")
+    @ApiModelProperty(value = "样本类型代码：无创{1. 全血、2. 血浆、4. DNA}，康孕{1：产前绒毛；2：流产物绒毛；4：胎儿组织；8：羊水；16：脐带血；\n" +
+            "32：产前样本DNA；128：产后样本DNA；64：外周血256:羊水培养细胞}", example = "1")
     @TableField("sample_type")
     private Integer sampleType;
 

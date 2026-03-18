@@ -3,7 +3,65 @@
 <mapper namespace="org.xinrui.kangyun.mapper.SampleMapper">
 
     <select id="selectByOldSampleNum" resultType="org.xinrui.kangyun.dto.SampleDto">
-        SELECT * FROM sample WHERE old_sample_num = #{oldSampleNum}
+        SELECT
+            si.sample_id AS sampleNo,
+            si.old_sample_num AS oldSampleNum,
+            si.product_no AS productNo,
+            si.sample_type AS sampleType,
+            si.hospital_name AS hospitalName,
+            si.department_name AS departmentName,
+            si.doctor_name AS doctorName,
+            si.clinic_num AS clinicNum,
+            si.is_save_pedigree AS isSavePedigree,
+            si.proband_sample AS probandSample,
+            si.client_relation AS clientRelation,
+            pi.name AS patientName,
+            CASE
+                WHEN pi.sex = '男' THEN 1
+                WHEN pi.sex = '女' THEN 2
+                ELSE 0
+                END AS patientGender,
+            CAST(sei.patient_age AS Char) AS patientAge,
+            pi.identity AS patientIdCard,
+            UNIX_TIMESTAMP(si.collect_date) * 1000 AS collectDate,
+            UNIX_TIMESTAMP(si.received_date) * 1000 AS receivedDate,
+            pi.phone AS patientMobile,
+            si.client_type AS clientType,
+            si.detect_reason AS detectReason,
+            si.clinical_diagnosis AS clinicalDiagnosis,
+            si.detect_clinical_diagnosis AS detectClinicalDiagnosis,
+            sei.bh_gravidity AS gestationalTimes,
+            sei.bh_parity AS childbirthTimes,
+            CAST(sei.bh_other AS SIGNED) AS abortionTimes,
+            CONCAT_WS(',', sei.gestational_weeks, sei.gestational_days) AS gestationalWeeks,
+            CAST(sei.tubebaby_type AS SIGNED) AS borrowOvumFlag,
+            sei.last_menstrual_period AS lastMenstrualPeriodDate,
+            sei.fetus_test_flag AS fetusTestFlag,
+            CAST(sei.us_check AS SIGNED) AS ultrasonicFlag,
+            sei.ultrasound_test_date AS ultrasoundTestDate,
+            CAST(sei.us_check AS SIGNED) AS ultrasonicAbnormalFlag,
+            sei.male_detect_flag AS maleDetectFlag,
+            sei.detect_method_male AS detectMethodMale,
+            sei.detect_result_male AS detectResultMale,
+            sei.female_detect_flag AS femaleDetectFlag,
+            sei.detect_method_female AS detectMethodFemale,
+            sei.detect_result_female AS detectResultFemale,
+            sei.child_detect_flag AS childDetectFlag,
+            sei.detect_method_child AS detectMethodChild,
+            sei.detect_result_child AS detectResultChild,
+            sei.illness_history_genetic_flag AS illnessHistoryGeneticFlag,
+            sei.illness_history_genetic AS illnessHistoryGenetic,
+            sei.patient_remark AS remark,
+            sei.illness_history_past_male AS illnessHistoryPastMale,
+            sei.illness_history_past_female AS illnessHistoryPastFemale
+        FROM
+            t_lis_sample si
+                LEFT JOIN
+            t_mchi_patient pi ON si.patient_oid = pi.oid
+                LEFT JOIN
+            t_lis_examination sei ON si.oid = sei.sample_oid
+        WHERE
+            si.old_sample_num = #{oldSampleNum}
     </select>
 
 

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -183,10 +184,10 @@ public class SampleDto {
     private String illnessHistoryPastFemale;
 
     @ApiModelProperty(value = "操作人")
-    private String operator;
+    private Long operator;
 
     @ApiModelProperty(value = "操作时间（格式：yyyy-MM-dd）")
-    private String operationTime;
+    private LocalDateTime operationTime;
 
     // 以下字段根据响应示例补充（文档未明确但示例存在）
     @ApiModelProperty(value = "检测对象（文档未明确，示例中存在）")
