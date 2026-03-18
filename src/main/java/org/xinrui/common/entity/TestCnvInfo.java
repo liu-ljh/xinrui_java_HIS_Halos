@@ -81,4 +81,8 @@ public class TestCnvInfo implements Serializable {
     @ApiModelProperty(value = "更新时间(审计字段)", example = "2023-08-15T16:00:00")
     @TableField("updated_on")
     private LocalDateTime updatedOn;
+
+    @ApiModelProperty(value = "cnv推送结果原始数据")
+    @TableField("result_raw_data")
+    private Long resultRawData;
 }

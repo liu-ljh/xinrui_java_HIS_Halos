@@ -29,10 +29,5 @@ public class SampleController {
 
     }
 
-    //测试使用
-    @PostMapping("/test")
-    public ApiResponse test(@RequestBody String body) {
-        log.info("body:{}", body);
-        return ApiResponse.success();
-    }
+
 }
