@@ -248,4 +248,12 @@ public class ExaminationInfo implements Serializable {
     @TableField("illness_history_past_female")
     private String illnessHistoryPastFemale;
 
+
+    @ApiModelProperty(value = "是否单胎双胎检测", example = "1-是0-否")
+    @TableField("fetus_test_flag")
+    private Integer fetusTestFlag;
+
+    @ApiModelProperty(value = "超声检测日期")
+    @TableField("ultrasound_test_date")
+    private String ultrasoundTestDate;
 }

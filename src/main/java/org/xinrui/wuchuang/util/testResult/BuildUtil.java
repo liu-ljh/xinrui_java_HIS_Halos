@@ -162,6 +162,8 @@ public class BuildUtil {
         exam.setIllnessHistoryGeneticFlag(0);
         exam.setIllnessHistoryPastMale(null);
         exam.setIllnessHistoryPastFemale(null);
+        exam.setFetusTestFlag(0);
+        exam.setUltrasoundTestDate(null);
         //结束
 
         // 设置审计字段
