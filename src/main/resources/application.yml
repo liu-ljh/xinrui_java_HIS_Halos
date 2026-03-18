@@ -4,6 +4,6 @@ server:
 #数据源配置
 spring:
   application:
-    name: xinrui-BGI
+    name: xinrui-bgi
   profiles:
     active: dev
