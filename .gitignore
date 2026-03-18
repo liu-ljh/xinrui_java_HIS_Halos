@@ -1,0 +1,7 @@
+test/
+target/
+build/
+
+# IDE
+.idea/
+*.iml
