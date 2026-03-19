@@ -13,6 +13,7 @@ import org.xinrui.common.mapper.SampleInfoMapper;
 import org.xinrui.common.mapper.TestReportFileInfoMapper;
 import org.xinrui.common.exception.BusinessException;
 import org.xinrui.wuchuang.service.*;
+import org.xinrui.wuchuang.util.TestReportFileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class TestReportFileServiceImpl implements TestReportFileService {
 
         String fileName = file.getOriginalFilename();
         log.info("接收文件: {}", fileName);
-        String extension = getFileExtension(fileName);
+        String extension = TestReportFileUtil.getFileExtension(fileName);
 
         // 2. 验证文件格式
         int fileType;
@@ -66,7 +67,7 @@ public class TestReportFileServiceImpl implements TestReportFileService {
         }
 
         // 3. 解析文件名 - 提取 sampleId
-        String sampleId = extractSampleIdFromFileName(fileName, extensionLen);
+        String sampleId = TestReportFileUtil.extractSampleIdFromFileName(fileName, extensionLen);
 
         // 4. 根据 sampleId 查询数据库
         SampleInfo sampleInfo = findSampleInfoBySampleId(sampleId);
@@ -97,41 +98,6 @@ public class TestReportFileServiceImpl implements TestReportFileService {
         return true;
     }
 
-
-
-    /**
-     * 从文件名中提取 sampleId
-     *
-     * @param fileName 文件名
-     * @param extensionLen 文件扩展名长度
-     * @return sampleId
-     */
-    private String extractSampleIdFromFileName(String fileName, int extensionLen) {
-
-        // 移除后缀
-        String sampleId = fileName.substring(0, fileName.length() - extensionLen);
-
-        if (sampleId.isEmpty()) {
-            throw new BusinessException("sampleId 不能为空");
-        }
-
-        log.info("从文件名 {} 中提取到 sampleId: {}", fileName, sampleId);
-        return sampleId;
-    }
-
-
-    /**
-     * 获取文件扩展名（小写）
-     *
-     * @param fileName 文件名
-     * @return 文件扩展名（不含点号）
-     */
-    private String getFileExtension(String fileName) {
-        if (fileName == null || !fileName.contains(".")) {
-            return "";
-        }
-        return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-    }
 
 
 
