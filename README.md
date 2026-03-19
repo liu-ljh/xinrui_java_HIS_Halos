@@ -1,18 +1,20 @@
 ## 2026.3.2
 
-### 目前实现的所有接口
+## 目前实现的所有接口
 
-1. #### **Halos请求样本信息**
+### 一、无创
 
->URL:http://172.18.4.89:8030/his/V3/sample/get/{oldSampleNum}
+#### 1.**Halos请求样本信息**
+
+>URL:http://172.18.4.89:8030/his/V3/wuchuang/sample/get/{oldSampleNum}
 >
 >必需字段：
 >
 >1. oldSampleNum（原样本编号）
 
-2. #### **Halos推送JSON结果数据**
+#### 2.**Halos推送JSON结果数据**
 
->URL:http://172.18.4.89:8030/his/V3/result/pushResult
+>URL:http://172.18.4.89:8030/his/V3/wuchuang/result/pushResult
 >
 >必需字段：
 >
@@ -30,20 +32,53 @@
 >12. tubeType(管道类型)
 >13. oldSampleNum(原样本编号)
 
-3. #### **Halos推送PDF/WORD报告文件**
+#### 3.Halos推送PDF/WORD报告文件
 
->URL:http://172.18.4.89:8030/his/V3/result/pushReport
+>URL http://172.18.4.89:8030/his/V3/wuchuang/result/pushReport
 >
 >必需传递请求参数：
 >file(multipart/form-data的key)
 >
->PDF报告文件默认存储路径为：D:/service/BGI/HalosReportFile/{yyyy/MM/dd}/pdf，根路径（D:/service/BGI/HalosReportFile）可在配置文件里修改
+>PDF报告文件默认存储路径为：D:/service/BGI/ReportFile/WuChuangReport/{yyyy/MM/dd}/pdf，根路径（D:/service/BGI/ReportFile/WuChuangReport/）可在配置文件里修改
 >
->word报告文件默认存储路径为：D:/service/BGI/HalosReportFile/{yyyy/MM/dd}/word，根路径（D:/service/BGI/HalosReportFile）可在配置文件里修改
+>word报告文件默认存储路径为：D:/service/BGI/ReportFile/WuChuangReport/{yyyy/MM/dd}/word，根路径（D:/service/BGI/ReportFile/WuChuangReport/）可在配置文件里修改
 
 
 
-### 其他非文档要求的已实现接口
+### 二、康孕
+
+#### 1.**Halos请求样本信息**
+
+>URL:http://172.18.4.89:8030/his/V3/kangyun/sample/get/{oldSampleNum}
+>
+>必需字段：
+>
+>1. oldSampleNum（原样本编号）
+
+#### 2.Halos推送JSON结果数据
+
+>URL:http://172.18.4.89:8030/his/V3/kangyun/result/pushResult
+>
+>必需字段：未知
+>
+>
+
+#### 3.Halos推送PDF/WORD报告文件
+
+>URL: http://172.18.4.89:8030/his/V3/kangyun/result/pushReport
+>
+>必需传递请求参数：
+>file(multipart/form-data的key)
+>
+>PDF报告文件默认存储路径为：D:/service/BGI/ReportFile/KangYunReport/{yyyy/MM/dd}/pdf，根路径（D:/service/BGI/ReportFile/KangYunReport/）可在配置文件里修改
+>
+>word报告文件默认存储路径为：D:/service/BGI/ReportFile/KangYunReport/{yyyy/MM/dd}/word，根路径（D:/service/BGI/ReportFile/KangYunReport/）可在配置文件里修改
+
+
+
+
+
+### 三、其他非文档要求的已实现接口
 
 #### 1. 样本表接口
 
@@ -75,7 +110,9 @@
 | 根据ID查询检查 | GET      | `http://172.18.4.89:8030/his/V3/lis/examination/get/{oid}`   |
 | 分页查询检查   | POST     | `http://172.18.4.89:8030/his/V3/lis/examination/list`        |
 
-### 其他
+
+
+### 四、其他
 
 1. log文件配置路径D:/service/BGI/node8030/log
 2. 单个日志文件最大10MB。超过这个大小，即使还在同一天，也会立即创建一个新的日志文件（序号`%i`会+1）。
@@ -87,20 +124,18 @@
 
 
 
-### 修改记录
+### 五、修改记录
 
 2026/3/4 11：38        柯心怡修改了halos推送pdf和word报告接口，将两个接口合并成一个共用的接口
 2026/3/11 13：08       柯心怡修复了halos推送报告接口中additionalReportFlag参数为String而不是Int的问题
 2026/3/11 17：15       柯心怡修复了handleTestCnvInfo空列表插入数据导致异常的问题，以及downSymdromeFlag等四个字段命名错误导致插入数据异常的问题
-2026/3/11 17：58       柯心怡修改了pdf和word的存储路径，从D:/fileStorage修改到默认存储路径为D:/service/BGI/HalosReportFile/{yyyy/MM/dd}/pdf和D:/service/BGI/HalosReportFile/{yyyy/MM/dd}/word
+2026/3/11 17：58       柯心怡修改了pdf和word的存储路径，根存储路径从D:/fileStorage修改为D:/service/BGI/ReportFile/KangYunReport/和D:/service/BGI/ReportFile/WuChuangReport/
 
 2026/3/12 14:40   刘家铧新增样本登记信息返回和样本登记信息接收接口，URL:
 
 http://172.18.4.89:8030/his/V3/sample/registration/get
 
 http://172.18.4.89:8030/his/V3/sample/registration/save
-
-
 
 ---
 
