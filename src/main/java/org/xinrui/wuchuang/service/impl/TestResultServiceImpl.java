@@ -261,7 +261,7 @@ public class TestResultServiceImpl implements TestResultService {
                             info.setDiseaseDetail(diseaseDto.getDiseaseDetail());
                             info.setDiseaseDescription(diseaseDto.getDetail());
                         }
-
+                        info.setResultRawData(null);
                         info.setUpdatedBy(UPDATED_BY);
                         info.setUpdatedOn(LocalDateTime.now());
                         return info;
@@ -288,6 +288,7 @@ public class TestResultServiceImpl implements TestResultService {
                         info.setDiseaseName(diseaseDto.getDisease());
                         info.setDiseaseDetail(diseaseDto.getDiseaseDetail());
                         info.setDiseaseDescription(diseaseDto.getDetail());
+                        info.setResultRawData(null);
                         info.setUpdatedBy(UPDATED_BY);
                         info.setUpdatedOn(LocalDateTime.now());
                         return info;
