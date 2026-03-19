@@ -73,6 +73,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.7.0</version> <!-- 或使用项目统一的版本号 -->
         </dependency>
+        <!-- 显式添加 Tomcat 依赖，确保打包时包含 Web 服务器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>2.7.0</version>
+        </dependency>
 
         <!-- Swagger 2.x 版本 -->
         <dependency>

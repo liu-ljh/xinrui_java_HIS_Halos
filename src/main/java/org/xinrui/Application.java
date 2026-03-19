@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Profile;
  * @SpringBootApplication 注解表示这是一个Spring Boot应用程序入口
  * 包含了 @Configuration、@EnableAutoConfiguration 和 @ComponentScan 的组合功能
  */
-@Profile("!prod")
 @EnableDiscoveryClient
 @SpringBootApplication
 public class Application {
