@@ -101,6 +101,7 @@
             ei.ivf_flag AS ivfFlag,
             ei.tubebaby_type AS tubebabyType,
             CAST(ei.fetus_type AS CHAR) AS fetusType,
+            CAST(ei.fetus_type AS CHAR) AS pregnancy,
             ei.gestational_weeks AS gestationalWeeks,
             ei.gestational_days AS gestationalDays,
             ei.us_check AS usCheck,

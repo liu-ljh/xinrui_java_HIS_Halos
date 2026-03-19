@@ -125,6 +125,10 @@ public class SampleRegistrationDto {
     @ApiModelProperty(value = "减胎日期")
     private String reduceDate;
 
+    /** 妊娠情况 */
+    @ApiModelProperty(value = "妊娠情况")
+    private String pregnancy;
+
     /** 是否已做唐筛（1-是，0-否） */
     @ApiModelProperty(value = "是否已做唐筛（1-是，0-否）")
     private Integer downSymdromeFlag;

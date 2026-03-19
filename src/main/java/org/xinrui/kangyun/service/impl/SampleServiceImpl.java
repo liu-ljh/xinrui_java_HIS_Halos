@@ -35,7 +35,9 @@ public class SampleServiceImpl implements SampleService {
 
         //3.对一些字段进行转换
         //查出来的borrowOvumFlag需要重新转换，此时01-自体供卵，02-异体供卵，需要换成2-否，1-是
-        if (sampleDto.getBorrowOvumFlag() == 1) {
+        if(sampleDto.getBorrowOvumFlag() == null){
+            sampleDto.setBorrowOvumFlag(0);
+        } else if(sampleDto.getBorrowOvumFlag() == 1) {
             sampleDto.setBorrowOvumFlag(2);
         } else if(sampleDto.getBorrowOvumFlag()==2){
             sampleDto.setBorrowOvumFlag(1);
@@ -51,7 +53,9 @@ public class SampleServiceImpl implements SampleService {
         }
 
         //ultrasonicAbnormalFlag超声检查是否异常，此时01-未见异常，02-提示异常，需要换成1是0否
-        if(sampleDto.getUltrasonicAbnormalFlag()==1){
+        if(sampleDto.getUltrasonicAbnormalFlag()==null){
+            sampleDto.setUltrasonicAbnormalFlag(0);
+        } else if(sampleDto.getUltrasonicAbnormalFlag()==1){
             sampleDto.setUltrasonicAbnormalFlag(0);
         } else if (sampleDto.getUltrasonicAbnormalFlag()==2) {
             sampleDto.setUltrasonicAbnormalFlag(1);

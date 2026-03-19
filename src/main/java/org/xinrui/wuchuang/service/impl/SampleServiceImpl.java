@@ -161,6 +161,13 @@ public class SampleServiceImpl implements SampleService {
             throw new BusinessException("-1", "请检查 screeningArchivesId 是否正确");
         }
 
+        String pregnancy = dto.getPregnancy();
+        if ("1".equals(pregnancy)) {
+            dto.setPregnancy("单胎");
+        } else {
+            dto.setPregnancy((pregnancy == null || "".equals(pregnancy)) ? "" : "双胎或多胎");
+        }
+
         log.info("样本登记信息查询成功，样本编号：{}", dto.getSampleId());
         return dto;
     }
