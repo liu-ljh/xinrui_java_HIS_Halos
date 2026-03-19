@@ -109,3 +109,11 @@ http://172.18.4.89:8030/his/V3/sample/registration/save
 2026/3/16 修改了无创和康孕所有的URL前缀，无创为/his/V3/wuchuang，康孕的为/his/V3/kangyun
 
 2026/3/17 针对样本、检查、样本文件表的修改对代码做了相应修改
+
+2026/3/17 完成康孕三个接口：
+
+>**Halos请求样本信息**:/his/V3/kangyun/sample/get/{oldSampleNum}
+>
+>**Halos推送结果数据**:/his/V3/kangyun/result/pushResult
+>
+>**推送PDF/WORD报告**：/his/V3/kangyun/result/pushReport
