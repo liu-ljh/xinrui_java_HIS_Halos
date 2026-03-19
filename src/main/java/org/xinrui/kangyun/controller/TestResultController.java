@@ -34,7 +34,7 @@ public class TestResultController {
         boolean success = testResultService.handlePushResult(requestDTO);
         return success ?
                 ApiResponse.success() : // 调用无参 success
-                ApiResponse.fail("请求失败");
+                ApiResponse.fail("请求失败，请确保样本数据在系统有归档");
 
     }
 

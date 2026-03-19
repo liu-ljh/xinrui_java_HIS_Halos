@@ -84,5 +84,5 @@ public class TestCnvInfo implements Serializable {
 
     @ApiModelProperty(value = "cnv推送结果原始数据")
     @TableField("result_raw_data")
-    private Long resultRawData;
+    private String resultRawData;
 }

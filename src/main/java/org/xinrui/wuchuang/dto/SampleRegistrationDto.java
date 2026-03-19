@@ -194,7 +194,6 @@ public class SampleRegistrationDto {
     @ApiModelProperty(value = "筛查档案主表主键")
     private Long screeningArchivesId;
 
-    //添加妊娠情况字段
 
 
 }
