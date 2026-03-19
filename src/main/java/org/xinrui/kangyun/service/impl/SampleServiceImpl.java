@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Service("KangyunSampleService")
 public class SampleServiceImpl implements SampleService {
 
-    private static final Long UPDATED_BY = 1L; // 固定更新人ID
 
     @Autowired
     private SampleMapper sampleMapper;
@@ -34,35 +33,7 @@ public class SampleServiceImpl implements SampleService {
         SampleUtil.RequestSampleValidate(sampleDto);
 
         //3.对一些字段进行转换
-        //查出来的borrowOvumFlag需要重新转换，此时01-自体供卵，02-异体供卵，需要换成2-否，1-是
-        if(sampleDto.getBorrowOvumFlag() == null){
-            sampleDto.setBorrowOvumFlag(0);
-        } else if(sampleDto.getBorrowOvumFlag() == 1) {
-            sampleDto.setBorrowOvumFlag(2);
-        } else if(sampleDto.getBorrowOvumFlag()==2){
-            sampleDto.setBorrowOvumFlag(1);
-        }else{
-            sampleDto.setBorrowOvumFlag(0);
-        }
-
-        //查出来的ultrasonicFlag是否做过超声检查，此时01-未见异常，02-提示异常，需要换成1是0否，有数值为是，无数值为否
-        if (sampleDto.getUltrasonicFlag()!= null && sampleDto.getUltrasonicFlag()!=0){
-            sampleDto.setUltrasonicFlag(1);
-        }else {
-            sampleDto.setUltrasonicFlag(0);
-        }
-
-        //ultrasonicAbnormalFlag超声检查是否异常，此时01-未见异常，02-提示异常，需要换成1是0否
-        if(sampleDto.getUltrasonicAbnormalFlag()==null){
-            sampleDto.setUltrasonicAbnormalFlag(0);
-        } else if(sampleDto.getUltrasonicAbnormalFlag()==1){
-            sampleDto.setUltrasonicAbnormalFlag(0);
-        } else if (sampleDto.getUltrasonicAbnormalFlag()==2) {
-            sampleDto.setUltrasonicAbnormalFlag(1);
-        }
-
-        sampleDto.setOperator(UPDATED_BY);
-        sampleDto.setOperationTime(LocalDateTime.now());
+        SampleUtil.convertSampleFlags(sampleDto);
 
         log.info("样本信息查询成功，样本编号: {}", sampleDto.getSampleNo());
         return sampleDto;
