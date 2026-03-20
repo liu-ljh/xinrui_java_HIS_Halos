@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.xinrui.common.exception.TooManyResultsException;
 import java.util.stream.Collectors;
 
 /**
@@ -66,6 +67,15 @@ public class GlobalExceptionHandler {
          log.error("数字格式异常(应为String转Integer出错)", ex);
          return ApiResponse.fail(-1, "请求失败");
     }
+
+    @ExceptionHandler(TooManyResultsException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<Void> handleTooManyResultsException(TooManyResultsException e) {
+        // e.getMessage() 里面已经包含了我们格式化好的详细错误信息
+        log.warn("业务逻辑异常: {}", e.getMessage());
+        return ApiResponse.fail(-1, e.getMessage());
+    }
+
 
     // 系统异常
     @ExceptionHandler(Exception.class)

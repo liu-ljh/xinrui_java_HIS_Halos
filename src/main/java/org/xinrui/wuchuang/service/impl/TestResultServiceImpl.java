@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xinrui.common.entity.*;
+import org.xinrui.common.exception.TooManyResultsException;
 import org.xinrui.common.mapper.*;
 import org.xinrui.wuchuang.dto.testResult.TestResultDto;
 import org.xinrui.wuchuang.dto.testResult.nested.DiseaseDto;
@@ -85,11 +86,17 @@ public class TestResultServiceImpl implements TestResultService {
     @Override
     public SampleInfo handleSampleInfo(TestResultDto dto, Long patientOid) {
         // 通过sample_id和old_sample_num查询
-        SampleInfo sampleInfo = sampleInfoMapper.selectOne(
-                Wrappers.<SampleInfo>lambdaQuery()
-                        .eq(SampleInfo::getSampleId, dto.getSampleId())
-                        .eq(SampleInfo::getOldSampleNum, dto.getOldSampleNum())
-        );
+        SampleInfo sampleInfo = null;
+        try{
+            sampleInfo = sampleInfoMapper.selectOne(
+                    Wrappers.<SampleInfo>lambdaQuery()
+                            .eq(SampleInfo::getSampleId, dto.getSampleId())
+                            .eq(SampleInfo::getOldSampleNum, dto.getOldSampleNum())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_sample","sample_id+old_sample_num");
+        }
+
 
         if (sampleInfo == null) {
             sampleInfo = BuildUtil.buildSampleInfo(dto);
@@ -112,10 +119,16 @@ public class TestResultServiceImpl implements TestResultService {
     @Override
     public PatientInfo handlePatientInfo(TestResultDto dto) {
         // 通过身份证号查询患者
-        PatientInfo patientInfo = patientInfoMapper.selectOne(
-                Wrappers.<PatientInfo>lambdaQuery()
-                        .eq(PatientInfo::getIdentity, dto.getPatientIdCard())
-        );
+        PatientInfo patientInfo = null;
+        try{
+            patientInfo = patientInfoMapper.selectOne(
+                    Wrappers.<PatientInfo>lambdaQuery()
+                            .eq(PatientInfo::getIdentity, dto.getPatientIdCard())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_mchi_patient","identity");
+        }
+
 
         if (patientInfo == null) {
             // 插入新患者
@@ -135,10 +148,15 @@ public class TestResultServiceImpl implements TestResultService {
             throw new BusinessException("样本信息为空");
         }
         // 通过sample_oid查询检查信息
-        ExaminationInfo exam = examinationInfoMapper.selectOne(
-                Wrappers.<ExaminationInfo>lambdaQuery()
-                        .eq(ExaminationInfo::getSampleOid, sampleInfo.getOid())
-        );
+        ExaminationInfo exam = null;
+        try{
+            exam = examinationInfoMapper.selectOne(
+                    Wrappers.<ExaminationInfo>lambdaQuery()
+                            .eq(ExaminationInfo::getSampleOid, sampleInfo.getOid())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_examination","sample_oid");
+        }
 
         if (exam == null) {
             exam = BuildUtil.buildExaminationInfo(dto, sampleInfo);
@@ -163,10 +181,15 @@ public class TestResultServiceImpl implements TestResultService {
         }
 
         // 通过sample_oid查询样本质控
-        SampleQcInfo qc = sampleQcInfoMapper.selectOne(
-                Wrappers.<SampleQcInfo>lambdaQuery()
-                        .eq(SampleQcInfo::getSampleOid, sampleInfo.getOid())
-        );
+        SampleQcInfo qc = null;
+        try{
+            qc = sampleQcInfoMapper.selectOne(
+                    Wrappers.<SampleQcInfo>lambdaQuery()
+                            .eq(SampleQcInfo::getSampleOid, sampleInfo.getOid())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_sample_qc","sample_oid");
+        }
 
         if (qc == null) {
             qc = BuildUtil.buildSampleQcInfo(dto, sampleInfo);
@@ -192,10 +215,15 @@ public class TestResultServiceImpl implements TestResultService {
         }
 
         // 通过sample_oid查询Lane质控
-        LaneQcInfo qc = laneQcInfoMapper.selectOne(
-                Wrappers.<LaneQcInfo>lambdaQuery()
-                        .eq(LaneQcInfo::getSampleOid, sampleInfo.getOid())
-        );
+        LaneQcInfo qc = null;
+        try{
+            qc = laneQcInfoMapper.selectOne(
+                    Wrappers.<LaneQcInfo>lambdaQuery()
+                            .eq(LaneQcInfo::getSampleOid, sampleInfo.getOid())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_lane_qc","sample_oid");
+        }
 
         if (qc == null) {
             qc = BuildUtil.buildLaneQcInfo(dto, sampleInfo);
@@ -215,11 +243,16 @@ public class TestResultServiceImpl implements TestResultService {
             throw new BusinessException("样本信息为空");
         }
 
+        TestResultInfo result = null;
         // 通过sample_oid查询检测结果
-        TestResultInfo result = testResultInfoMapper.selectOne(
-                Wrappers.<TestResultInfo>lambdaQuery()
-                        .eq(TestResultInfo::getSampleOid, sampleInfo.getOid())
-        );
+        try {
+            result = testResultInfoMapper.selectOne(
+                    Wrappers.<TestResultInfo>lambdaQuery()
+                            .eq(TestResultInfo::getSampleOid, sampleInfo.getOid())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_test_result","sample_oid");
+        }
 
         if (result == null) {
             result = BuildUtil.buildTestResultInfo(dto, sampleInfo);
@@ -230,10 +263,15 @@ public class TestResultServiceImpl implements TestResultService {
 //            log.info("result:{}", result);//测试使用
             testResultInfoMapper.updateById(result);
         }
-        TestResultInfo resultInfo = testResultInfoMapper.selectOne(
-                Wrappers.<TestResultInfo>lambdaQuery()
-                        .eq(TestResultInfo::getSampleOid, sampleInfo.getOid())
-        );
+        TestResultInfo resultInfo = null;
+        try{
+            resultInfo = testResultInfoMapper.selectOne(
+                    Wrappers.<TestResultInfo>lambdaQuery()
+                            .eq(TestResultInfo::getSampleOid, sampleInfo.getOid())
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_test_result","sample_oid");
+        }
         return resultInfo.getOid();
     }
 

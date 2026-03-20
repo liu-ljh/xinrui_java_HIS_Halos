@@ -10,6 +10,7 @@ import org.xinrui.common.entity.SampleInfo;
 import org.xinrui.common.entity.TestCnvInfo;
 import org.xinrui.common.entity.TestResultInfo;
 import org.xinrui.common.exception.BusinessException;
+import org.xinrui.common.exception.TooManyResultsException;
 import org.xinrui.common.mapper.SampleInfoMapper;
 import org.xinrui.common.mapper.TestCnvInfoMapper;
 import org.xinrui.common.mapper.TestResultInfoMapper;
@@ -40,18 +41,29 @@ public class TestResultServiceImpl implements TestResultService {
             return false; // 样本编号为空
         }
 
+        SampleInfo sampleInfo = null;
         // 2. 查询t_lis_sample表
-        SampleInfo sampleInfo = sampleInfoMapper.selectOne(new QueryWrapper<SampleInfo>()
-                .eq("sample_id", sampleId));
+        try{
+            sampleInfo = sampleInfoMapper.selectOne(new QueryWrapper<SampleInfo>()
+                    .eq("sample_id", sampleId));
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_sample","sample_id");
+        }
+
 
         if (sampleInfo == null) {
             log.error("样本信息缺失，无法存入cnv结果,请检查t_lis_sample表");
             throw new BusinessException("-1","样本未归档，无法存入cnv结果"); // 样本未归档
         }
-
+        TestResultInfo testResultInfo = null;
         // 3. 查询t_lis_test_result表
-        TestResultInfo testResultInfo = testResultInfoMapper.selectOne(new QueryWrapper<TestResultInfo>()
-                .eq("sample_oid", sampleInfo.getOid()));
+        try{
+            testResultInfo = testResultInfoMapper.selectOne(new QueryWrapper<TestResultInfo>()
+                    .eq("sample_oid", sampleInfo.getOid()));
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e){
+            throw new TooManyResultsException("t_lis_test_result","sample_oid");
+        }
+
 
         if (testResultInfo == null) {
             log.error("检测结果未创建，无法存入cnv结果,请检查t_lis_test_result表");

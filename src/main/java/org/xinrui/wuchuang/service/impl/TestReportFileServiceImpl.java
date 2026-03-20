@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.xinrui.common.entity.SampleInfo;
 import org.xinrui.common.entity.TestReportFileInfo;
+import org.xinrui.common.exception.TooManyResultsException;
 import org.xinrui.common.mapper.SampleInfoMapper;
 import org.xinrui.common.mapper.TestReportFileInfoMapper;
 import org.xinrui.common.exception.BusinessException;
@@ -111,7 +112,16 @@ public class TestReportFileServiceImpl implements TestReportFileService {
      */
     private SampleInfo findSampleInfoBySampleId(String sampleId) {
         // 根据sampleId查询SampleInfo
-        SampleInfo sampleInfo = sampleInfoMapper.selectOne(
+        SampleInfo sampleInfo = null;
+        try {
+            sampleInfo = sampleInfoMapper.selectOne(
+                    new QueryWrapper<SampleInfo>()
+                            .eq("sample_id", sampleId)
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e ){
+            throw new TooManyResultsException("t_lis_sample","sample_id");
+        }
+        sampleInfo = sampleInfoMapper.selectOne(
                 new QueryWrapper<SampleInfo>()
                         .eq("sample_id", sampleId)
         );
@@ -131,14 +141,19 @@ public class TestReportFileServiceImpl implements TestReportFileService {
      */
     private void updateReportFileRecord(long sampleOid, String currentDate, String newFileName, int fileType) {
         String relativePath = currentDate + "/" + newFileName;
-
+        TestReportFileInfo existingFile = null;
         // 检查是否已存在记录
-        TestReportFileInfo existingFile = testReportFileInfoMapper.selectOne(
-                new QueryWrapper<TestReportFileInfo>()
-                        .eq("sample_oid", sampleOid)
-                        .eq("file_type", fileType)
-                        .eq("report_type", "2")
-        );
+        try {
+            existingFile = testReportFileInfoMapper.selectOne(
+                    new QueryWrapper<TestReportFileInfo>()
+                            .eq("sample_oid", sampleOid)
+                            .eq("file_type", fileType)
+                            .eq("report_type", "2")
+            );
+        }catch (com.baomidou.mybatisplus.core.exceptions.MybatisPlusException e ){
+            throw new TooManyResultsException("t_lis_test_report_file","sample_oid+file_type+report_type");
+        }
+
 
         TestReportFileInfo reportFile = new TestReportFileInfo();
         reportFile.setSampleOid(sampleOid);

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import org.xinrui.wuchuang.dto.SampleDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.xinrui.wuchuang.dto.SampleRegistrationDto;
 
 import java.time.LocalDate;
 
@@ -24,11 +23,6 @@ public interface SampleMapper {
 
     LocalDate selectCollectDateBySAId(@Param("screeningArchivesId") Long screeningArchivesId);
 
-    /**
-     * 根据筛查档案 ID 查询样本登记信息（多表联查）
-     * @param screeningArchivesId 筛查档案 ID
-     * @return 样本登记 DTO
-     */
-    SampleRegistrationDto selectSampleRegistrationBySAId(Long screeningArchivesId);
+
 
 }
